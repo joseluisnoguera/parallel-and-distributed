@@ -5,7 +5,7 @@
 #include "pi_approximation.c"
 #include "matrix_multiplication.c"
 
-#define RUNS 50
+#define RUNS 30
 
 double mean(double *array, int size) {
   int i;
@@ -82,7 +82,7 @@ void main() {
   fprintf(fp_pi_ap_sch, "threads,num steps,schedule type,chunk size,static schedule,dynamic schedule");
   fprintf(fp_m_m_sch, "threads,matrix dimension,schedule type,chunk size,static schedule,dynamic schedule");
 
-  long num_steps_array[] = {10000, 100000, 1000000, 10000000, 100000000};
+  long num_steps_array[] = {10000, 100000, 1000000, 10000000};
   int pi_approximation_test_runs = sizeof(num_steps_array) / sizeof(num_steps_array[0]);
   // Square matrices for simplicity
   int matrix_dimensions[] = {10, 50, 100, 250, 400};
@@ -91,7 +91,7 @@ void main() {
   const int DEFAULT_CHUNK_SIZE = 1;
   const int THREADS = omp_get_max_threads();
 
-  for (int threads = 4; threads < THREADS; threads = threads + 4) {
+  for (int threads = 4; threads <= THREADS; threads = threads + 4) {
     // Pi approximation
     printf("\nStatistics for pi approximation:\n");
 
