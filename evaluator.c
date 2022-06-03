@@ -82,10 +82,10 @@ void main() {
   fprintf(fp_pi_ap_sch, "threads,num steps,schedule type,chunk size,static schedule,dynamic schedule");
   fprintf(fp_m_m_sch, "threads,matrix dimension,schedule type,chunk size,static schedule,dynamic schedule");
 
-  long num_steps_array[] = {100000, 1000000, 10000000, 100000000, 1000000000};
+  long num_steps_array[] = {10000, 100000, 1000000, 10000000, 100000000};
   int pi_approximation_test_runs = sizeof(num_steps_array) / sizeof(num_steps_array[0]);
   // Square matrices for simplicity
-  int matrix_dimensions[] = {10, 50, 100, 250, 500};
+  int matrix_dimensions[] = {10, 50, 100, 250, 400};
   int matrix_multiplication_test_runs = sizeof(matrix_dimensions) / sizeof(matrix_dimensions[0]);
   int chunk_sizes[] = {10, 50, 100, 300};
   const int DEFAULT_CHUNK_SIZE = 1;
