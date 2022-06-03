@@ -5,7 +5,7 @@
 #include "pi_approximation.c"
 #include "matrix_multiplication.c"
 
-#define RUNS 50
+#define RUNS 10
 
 double mean(double *array, int size) {
   int i;
@@ -73,8 +73,8 @@ void main() {
   fp_pi_ap = fopen("pi_approximation.csv", "w");
   fp_m_m = fopen("matrix_multiplication.csv", "w");
 
-  fprintf(fp_pi_ap, "threads,num_steps,pi_approximation_without_omp,pi_approximation_parallel_for,pi_approximation_parallel_for_reduction");
-  fprintf(fp_m_m, "threads,matrix_dimension,matrix_multiplication_without_omp, matrix_multiplication_parallel_for, matrix_multiplication_parallel_for_reduction");
+  fprintf(fp_pi_ap, "threads,num steps,sequential,parallel for,parallel for reduction");
+  fprintf(fp_m_m, "threads,matrix dimension,sequential,parallel for,parallel for reduction");
 
   for (int threads = 2; threads < 9; threads = threads + 2) {
     // Pi approximation
