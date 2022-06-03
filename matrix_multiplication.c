@@ -76,7 +76,7 @@ void matrix_multiplication_parallel_for_reduce(int threads, struct Matrix *A, st
   }
 }
 
-void matrix_multiplication_static_schedule(int threads, struct Matrix *A, struct Matrix *B, struct Matrix *C, int chuck_size) {
+void matrix_multiplication_static_schedule(int threads, struct Matrix *A, struct Matrix *B, struct Matrix *C, int chunk_size) {
   int i, j, k;
   double sum;
 
@@ -94,7 +94,7 @@ void matrix_multiplication_static_schedule(int threads, struct Matrix *A, struct
   }
 }
 
-void matrix_multiplication_dynamic_schedule(int threads, struct Matrix *A, struct Matrix *B, struct Matrix *C, int chuck_size) {
+void matrix_multiplication_dynamic_schedule(int threads, struct Matrix *A, struct Matrix *B, struct Matrix *C, int chunk_size) {
   int i, j, k;
   double sum;
 

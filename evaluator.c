@@ -132,8 +132,8 @@ void main() {
 
       for (int j = 0; j < sizeof(chunk_sizes) / sizeof(chunk_sizes[0]); j++) {
         int chunk_size = chunk_sizes[j];
-        double stats_parallel_for_static_sch = calculate_cpu_utilization_pi_approx(matrix_multiplication_static_schedule, threads, num_steps, chunk_size);
-        double stats_parallel_for_dynamic_sch = calculate_cpu_utilization_pi_approx(matrix_multiplication_dynamic_schedule, threads, num_steps, chunk_size);
+        double stats_parallel_for_static_sch = calculate_cpu_utilization_matrix_mult(matrix_multiplication_static_schedule, threads, A, B, C, chunk_size);
+        double stats_parallel_for_dynamic_sch = calculate_cpu_utilization_matrix_mult(matrix_multiplication_dynamic_schedule, threads, A, B, C, chunk_size);
 
         fprintf(fp_pi_ap_sch, "\n%d,%ld,static,%d,%.6f,%.6f", threads, matrix_dimension, chunk_size, stats_parallel_for_static_sch, stats_parallel_for_dynamic_sch);
       }
