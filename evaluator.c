@@ -46,14 +46,14 @@ double calculate_cpu_utilization_pi_approx(void (*func)(int, long, int), int thr
   return cpu_time_mean;
 }
 
-double calculate_cpu_utilization_matrix_mult(void (*func)(int, struct Matrix*, struct Matrix*, struct Matrix*), int threads, struct Matrix *A, struct Matrix *B, struct Matrix *C) {
+double calculate_cpu_utilization_matrix_mult(void (*func)(int, struct Matrix*, struct Matrix*, struct Matrix*, int), int threads, struct Matrix *A, struct Matrix *B, struct Matrix *C, int chunk_size) {
   clock_t start, end;
   double cpu_times_used[RUNS];
   double cpu_time_mean = 0.0;
 
   for (int i = 0; i < RUNS; i++) {
     start = clock();
-    func(threads, A, B , C);
+    func(threads, A, B , C, chunk_size);
     end = clock();
     cpu_times_used[i] = (double) (end - start) / CLOCKS_PER_SEC;
   }
@@ -123,20 +123,19 @@ void main() {
       struct Matrix* B = create_random_matrix(matrix_dimension, matrix_dimension);
       struct Matrix* C = create_random_matrix(matrix_dimension, matrix_dimension);
 
-      double stats_matrix_multiplication_without_omp = calculate_cpu_utilization_matrix_mult(matrix_multiplication_without_omp, threads, A, B, C);
-      double stats_matrix_multiplication_parallel_for = calculate_cpu_utilization_matrix_mult(matrix_multiplication_parallel_for, threads, A, B, C);
-      double stats_matrix_multiplication_parallel_for_reduce = calculate_cpu_utilization_matrix_mult(matrix_multiplication_parallel_for_reduce, threads, A, B, C);
+      double stats_matrix_multiplication_without_omp = calculate_cpu_utilization_matrix_mult(matrix_multiplication_without_omp, threads, A, B, C, DEFAULT_CHUCK_SIZE);
+      double stats_matrix_multiplication_parallel_for = calculate_cpu_utilization_matrix_mult(matrix_multiplication_parallel_for, threads, A, B, C, DEFAULT_CHUCK_SIZE);
+      double stats_matrix_multiplication_parallel_for_reduce = calculate_cpu_utilization_matrix_mult(matrix_multiplication_parallel_for_reduce, threads, A, B, C, DEFAULT_CHUCK_SIZE);
 
       printf("Threads: %d Matrix dimension:%d\n", threads, matrix_dimension);
       fprintf(fp_m_m, "\n%d,%d,%.6f,%.6f,%.6f", threads, matrix_dimension, stats_matrix_multiplication_without_omp, stats_matrix_multiplication_parallel_for, stats_matrix_multiplication_parallel_for_reduce);
 
       for (int j = 0; j < sizeof(chunk_sizes) / sizeof(chunk_sizes[0]); j++) {
         int chunk_size = chunk_sizes[j];
-        // double stats_parallel_for_sch = calculate_cpu_utilization_pi_approx(aproximate_pi_parallel_for_schedule, threads, num_steps, chunk_size);
-        // double stats_parallel_for_and_reduction_sch = calculate_cpu_utilization_pi_approx(aproximate_pi_parallel_for_reduction_schedule, threads, num_steps, chunk_size);
+        double stats_parallel_for_static_sch = calculate_cpu_utilization_pi_approx(matrix_multiplication_static_schedule, threads, num_steps, chunk_size);
+        double stats_parallel_for_dynamic_sch = calculate_cpu_utilization_pi_approx(matrix_multiplication_dynamic_schedule, threads, num_steps, chunk_size);
 
-        // fprintf(fp_pi_ap_sch, "\n%d,%ld,%d,%d,%.6f", threads, num_steps, chunk_size, stats_parallel_for_sch);
-        // fprintf(fp_pi_ap_sch, "\n%d,%ld,%d,%d,%.6f", threads, num_steps, chunk_size, stats_parallel_for_and_reduction_sch);
+        fprintf(fp_pi_ap_sch, "\n%d,%ld,static,%d,%.6f,%.6f", threads, matrix_dimension, chunk_size, stats_parallel_for_static_sch, stats_parallel_for_dynamic_sch);
       }
     }
   }
