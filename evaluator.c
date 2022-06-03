@@ -74,13 +74,13 @@ void main() {
   fp_m_m = fopen("matrix_multiplication.csv", "w");
 
   fprintf(fp_pi_ap, "threads,num_steps,pi_approximation_without_omp,pi_approximation_parallel_for,pi_approximation_parallel_for_reduction");
-  fprintf(fp_m_m, "threads,num_steps,matrix_multiplication__without_omp, matrix_multiplication_parallel_for, matrix_multiplication_parallel_for_reduction");
+  fprintf(fp_m_m, "threads,matrix_dimension,matrix_multiplication_without_omp, matrix_multiplication_parallel_for, matrix_multiplication_parallel_for_reduction");
 
   for (int threads = 2; threads < 9; threads = threads + 2) {
     // Pi approximation
     printf("\nStatistics for pi approximation:\n");
 
-    long num_steps_array[] = {10, 100, 1000, 10000, 100000, 1000000, 10000000};
+    long num_steps_array[] = {10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000};
     int pi_approximation_test_runs = sizeof(num_steps_array) / sizeof(num_steps_array[0]);
 
     for (int i = 0; i < pi_approximation_test_runs; i++) {
@@ -98,7 +98,7 @@ void main() {
     printf("\nStatistics for matrix multiplication:\n");
 
     // Square matrices for simplicity
-    int matrix_dimensions[] = {10, 50, 100, 250};
+    int matrix_dimensions[] = {10, 50, 100, 250, 500};
     int matrix_multiplication_test_runs = sizeof(matrix_dimensions) / sizeof(matrix_dimensions[0]);
 
     for(int i = 0; i < matrix_multiplication_test_runs; i++) {
