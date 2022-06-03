@@ -5,7 +5,7 @@
 #include "pi_approximation.c"
 #include "matrix_multiplication.c"
 
-#define RUNS 30
+#define RUNS 50
 
 double mean(double *array, int size) {
   int i;
@@ -82,12 +82,12 @@ void main() {
   fprintf(fp_pi_ap_sch, "threads,num steps,schedule type,chunk size,static schedule,dynamic schedule");
   fprintf(fp_m_m_sch, "threads,matrix dimension,schedule type,chunk size,static schedule,dynamic schedule");
 
-  long num_steps_array[] = {10, 100, 1000, 10000, 100000, 1000000, 10000000};
+  long num_steps_array[] = {10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000};
   int pi_approximation_test_runs = sizeof(num_steps_array) / sizeof(num_steps_array[0]);
   // Square matrices for simplicity
-  int matrix_dimensions[] = {10, 50, 100, 250};
+  int matrix_dimensions[] = {10, 50, 100, 250, 400};
   int matrix_multiplication_test_runs = sizeof(matrix_dimensions) / sizeof(matrix_dimensions[0]);
-  int chunk_sizes[] = {10, 100, 300, 500, 700, 1000};
+  int chunk_sizes[] = {10, 50, 100, 150, 200, 250, 300};
   const int DEFAULT_CHUNK_SIZE = 1;
 
   for (int threads = 2; threads < 9; threads = threads + 2) {
@@ -137,7 +137,7 @@ void main() {
         double stats_parallel_for_dynamic_sch = calculate_cpu_utilization_matrix_mult(matrix_multiplication_dynamic_schedule, threads, A, B, C, chunk_size);
 
         printf("Threads: %d Matrix dimension:%d Chunk size:%d\n", threads, matrix_dimension, chunk_size);
-        fprintf(fp_pi_ap_sch, "\n%d,%ld,static,%d,%.6f,%.6f", threads, matrix_dimension, chunk_size, stats_parallel_for_static_sch, stats_parallel_for_dynamic_sch);
+        fprintf(fp_pi_ap_sch, "\n%d,%d,static,%d,%.6f,%.6f", threads, matrix_dimension, chunk_size, stats_parallel_for_static_sch, stats_parallel_for_dynamic_sch);
       }
     }
   }
