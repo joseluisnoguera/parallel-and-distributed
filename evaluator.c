@@ -79,8 +79,8 @@ void main() {
 
   fprintf(fp_pi_ap, "threads,num steps,sequential,parallel for,parallel for reduction");
   fprintf(fp_m_m, "threads,matrix dimension,sequential,parallel for,parallel for reduction");
-  fprintf(fp_pi_ap_sch, "threads,num steps,schedule type,chunk size,static schedule,dynamic schedule");
-  fprintf(fp_m_m_sch, "threads,matrix dimension,schedule type,chunk size,static schedule,dynamic schedule");
+  fprintf(fp_pi_ap_sch, "threads,num steps,chunk size,static schedule,dynamic schedule");
+  fprintf(fp_m_m_sch, "threads,matrix dimension,chunk size,static schedule,dynamic schedule");
 
   long num_steps_array[] = {10000, 100000, 1000000, 10000000};
   int pi_approximation_test_runs = sizeof(num_steps_array) / sizeof(num_steps_array[0]);
@@ -111,7 +111,7 @@ void main() {
         double stats_parallel_for_dynamic_sch = calculate_cpu_utilization_pi_approx(aproximate_pi_dynamic_schedule, threads, num_steps, chunk_size);
 
         printf("Threads: %d Number of steps:%ld Chunk size:%d\n", threads, num_steps, chunk_size);
-        fprintf(fp_pi_ap_sch, "\n%d,%ld,static,%d,%.6f,%.6f", threads, num_steps, chunk_size, stats_parallel_for_static_sch, stats_parallel_for_dynamic_sch);
+        fprintf(fp_pi_ap_sch, "\n%d,%ld,%d,%.6f,%.6f", threads, num_steps, chunk_size, stats_parallel_for_static_sch, stats_parallel_for_dynamic_sch);
       }
     }
 
@@ -138,7 +138,7 @@ void main() {
         double stats_parallel_for_dynamic_sch = calculate_cpu_utilization_matrix_mult(matrix_multiplication_dynamic_schedule, threads, A, B, C, chunk_size);
 
         printf("Threads: %d Matrix dimension:%d Chunk size:%d\n", threads, matrix_dimension, chunk_size);
-        fprintf(fp_m_m_sch, "\n%d,%d,static,%d,%.6f,%.6f", threads, matrix_dimension, chunk_size, stats_parallel_for_static_sch, stats_parallel_for_dynamic_sch);
+        fprintf(fp_m_m_sch, "\n%d,%d,%d,%.6f,%.6f", threads, matrix_dimension, chunk_size, stats_parallel_for_static_sch, stats_parallel_for_dynamic_sch);
       }
     }
   }
