@@ -88,7 +88,7 @@ void main() {
   int matrix_dimensions[] = {10, 50, 100, 250};
   int matrix_multiplication_test_runs = sizeof(matrix_dimensions) / sizeof(matrix_dimensions[0]);
   int chunk_sizes[] = {10, 100, 300, 500, 700, 1000};
-  const int DEFAULT_CHUCK_SIZE = 1;
+  const int DEFAULT_CHUNK_SIZE = 1;
 
   for (int threads = 2; threads < 9; threads = threads + 2) {
     // Pi approximation
@@ -97,9 +97,9 @@ void main() {
     for (int i = 0; i < pi_approximation_test_runs; i++) {
       long num_steps = num_steps_array[i];
 
-      double stats_without_omp = calculate_cpu_utilization_pi_approx(aproximate_pi_without_omp, threads, num_steps, DEFAULT_CHUCK_SIZE);
-      double stats_parallel_for = calculate_cpu_utilization_pi_approx(aproximate_pi_parallel_for, threads, num_steps, DEFAULT_CHUCK_SIZE);
-      double stats_parallel_for_and_reduction = calculate_cpu_utilization_pi_approx(aproximate_pi_parallel_for_reduction, threads, num_steps, DEFAULT_CHUCK_SIZE);
+      double stats_without_omp = calculate_cpu_utilization_pi_approx(aproximate_pi_without_omp, threads, num_steps, DEFAULT_CHUNK_SIZE);
+      double stats_parallel_for = calculate_cpu_utilization_pi_approx(aproximate_pi_parallel_for, threads, num_steps, DEFAULT_CHUNK_SIZE);
+      double stats_parallel_for_and_reduction = calculate_cpu_utilization_pi_approx(aproximate_pi_parallel_for_reduction, threads, num_steps, DEFAULT_CHUNK_SIZE);
 
       printf("Threads: %d Number of steps:%ld\n", threads, num_steps);
       fprintf(fp_pi_ap, "\n%d,%ld,%.6f,%.6f,%.6f", threads, num_steps, stats_without_omp, stats_parallel_for, stats_parallel_for_and_reduction);
@@ -109,6 +109,7 @@ void main() {
         double stats_parallel_for_static_sch = calculate_cpu_utilization_pi_approx(aproximate_pi_static_schedule, threads, num_steps, chunk_size);
         double stats_parallel_for_dynamic_sch = calculate_cpu_utilization_pi_approx(aproximate_pi_dynamic_schedule, threads, num_steps, chunk_size);
 
+        printf("Threads: %d Number of steps:%ld Chunk size:%d\n", threads, num_steps, chunk_size);
         fprintf(fp_pi_ap_sch, "\n%d,%ld,static,%d,%.6f,%.6f", threads, num_steps, chunk_size, stats_parallel_for_static_sch, stats_parallel_for_dynamic_sch);
       }
     }
@@ -123,9 +124,9 @@ void main() {
       struct Matrix* B = create_random_matrix(matrix_dimension, matrix_dimension);
       struct Matrix* C = create_random_matrix(matrix_dimension, matrix_dimension);
 
-      double stats_matrix_multiplication_without_omp = calculate_cpu_utilization_matrix_mult(matrix_multiplication_without_omp, threads, A, B, C, DEFAULT_CHUCK_SIZE);
-      double stats_matrix_multiplication_parallel_for = calculate_cpu_utilization_matrix_mult(matrix_multiplication_parallel_for, threads, A, B, C, DEFAULT_CHUCK_SIZE);
-      double stats_matrix_multiplication_parallel_for_reduce = calculate_cpu_utilization_matrix_mult(matrix_multiplication_parallel_for_reduce, threads, A, B, C, DEFAULT_CHUCK_SIZE);
+      double stats_matrix_multiplication_without_omp = calculate_cpu_utilization_matrix_mult(matrix_multiplication_without_omp, threads, A, B, C, DEFAULT_CHUNK_SIZE);
+      double stats_matrix_multiplication_parallel_for = calculate_cpu_utilization_matrix_mult(matrix_multiplication_parallel_for, threads, A, B, C, DEFAULT_CHUNK_SIZE);
+      double stats_matrix_multiplication_parallel_for_reduce = calculate_cpu_utilization_matrix_mult(matrix_multiplication_parallel_for_reduce, threads, A, B, C, DEFAULT_CHUNK_SIZE);
 
       printf("Threads: %d Matrix dimension:%d\n", threads, matrix_dimension);
       fprintf(fp_m_m, "\n%d,%d,%.6f,%.6f,%.6f", threads, matrix_dimension, stats_matrix_multiplication_without_omp, stats_matrix_multiplication_parallel_for, stats_matrix_multiplication_parallel_for_reduce);
@@ -135,6 +136,7 @@ void main() {
         double stats_parallel_for_static_sch = calculate_cpu_utilization_matrix_mult(matrix_multiplication_static_schedule, threads, A, B, C, chunk_size);
         double stats_parallel_for_dynamic_sch = calculate_cpu_utilization_matrix_mult(matrix_multiplication_dynamic_schedule, threads, A, B, C, chunk_size);
 
+        printf("Threads: %d Matrix dimension:%d Chunk size:%d\n", threads, matrix_dimension, chunk_size);
         fprintf(fp_pi_ap_sch, "\n%d,%ld,static,%d,%.6f,%.6f", threads, matrix_dimension, chunk_size, stats_parallel_for_static_sch, stats_parallel_for_dynamic_sch);
       }
     }
